@@ -19,7 +19,7 @@ async function displayPosts() {
         postElement.classList.add('post');
         postElement.innerHTML = `
             <h2>${post.title}</h2>
-            ${post.image ? `<img src="${post.image}" alt="${post.title}">` : ''}
+            ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
             ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
             <p>${post.description}</p>
         `;
@@ -58,7 +58,7 @@ document.getElementById('searchBar').addEventListener('input', async (event) => 
     const posts = await fetchPosts();
     const filteredPosts = posts.filter(post => 
         post.title.toLowerCase().includes(searchTerm) || 
-        post.description.toLowerCase().includes(`#${searchTerm}`)
+        post.description.toLowerCase().includes(searchTerm)
     );
     
     const postContainer = document.getElementById('postContainer');
@@ -69,7 +69,7 @@ document.getElementById('searchBar').addEventListener('input', async (event) => 
         postElement.classList.add('post');
         postElement.innerHTML = `
             <h2>${post.title}</h2>
-            ${post.image ? `<img src="${post.image}" alt="${post.title}">` : ''}
+            ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
             ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
             <p>${post.description}</p>
         `;
@@ -83,13 +83,3 @@ document.getElementById('searchBar').addEventListener('input', async (event) => 
 
 displayPosts();
 displayPagination();
-
-
-function myFunction() {
-    var x = document.getElementById("myLinks");
-    if (x.style.display === "block") {
-        x.style.display = "none";
-    } else {
-        x.style.display = "block";
-    }
-}
