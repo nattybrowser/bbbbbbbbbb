@@ -93,3 +93,8 @@ function myFunction() {
         x.style.display = "block";
     }
 }
+if (post.image) {
+
+      image.loading = 'lazy'; // Set the loading attribute for browser-level lazy loading
+
+};
