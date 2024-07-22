@@ -1,9 +1,11 @@
 const postsPerPage = 16;
 let currentPage = 1;
+let allPosts = [];
 
 async function fetchPosts() {
     const response = await fetch('post.json');
-    return response.json();
+    allPosts = await response.json();
+    return allPosts;
 }
 
 async function displayPosts(posts) {
@@ -40,14 +42,17 @@ async function displayPagination(posts) {
 
     const totalPages = Math.ceil(posts.length / postsPerPage);
     for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement('a');
-        pageLink.href = '#';
-        pageLink.textContent = i;
-        pageLink.addEventListener('click', () => {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => {
             currentPage = i;
             displayPosts(posts);
+            displayPagination(posts);
         });
-        pagination.appendChild(pageLink);
+        pagination.appendChild(pageButton);
     }
 }
 
@@ -57,12 +62,15 @@ async function handleSearch() {
     
     const filteredPosts = posts.filter(post => {
         // Normalize both title and description for comparison
-        const normalizedTitle = post.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
-        const normalizedDescription = post.description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
+        const normalizeText = text => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ");
         
-        return normalizedTitle.includes(searchTerm) || normalizedDescription.includes(searchTerm);
+        const normalizedTitle = normalizeText(post.title);
+        const normalizedDescription = normalizeText(post.description);
+        
+        return normalizedTitle.includes(searchTerm.replace(/[\W_]+/g, " ")) || normalizedDescription.includes(searchTerm.replace(/[\W_]+/g, " "));
     });
 
+    currentPage = 1; // Reset to first page for new search
     displayPosts(filteredPosts);
     displayPagination(filteredPosts);
 }
@@ -87,5 +95,4 @@ window.addEventListener("load", function () {
       itemSelector: '.entry-item',
       layoutMode: 'masonry'
     });
-    
-  });
+});
