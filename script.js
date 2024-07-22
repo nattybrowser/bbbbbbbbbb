@@ -56,18 +56,20 @@ async function displayPagination(posts) {
     }
 }
 
+function normalizeText(text) {
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
+}
+
 async function handleSearch() {
-    const searchTerm = document.getElementById('searchBar').value.trim().toLowerCase();
+    const searchTerm = normalizeText(document.getElementById('searchBar').value);
     const posts = await fetchPosts();
     
     const filteredPosts = posts.filter(post => {
-        // Normalize both title and description for comparison
-        const normalizeText = text => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ");
-        
         const normalizedTitle = normalizeText(post.title);
         const normalizedDescription = normalizeText(post.description);
+        const normalizedTags = post.tags ? normalizeText(post.tags.join(' ')) : '';
         
-        return normalizedTitle.includes(searchTerm.replace(/[\W_]+/g, " ")) || normalizedDescription.includes(searchTerm.replace(/[\W_]+/g, " "));
+        return normalizedTitle.includes(searchTerm) || normalizedDescription.includes(searchTerm) || normalizedTags.includes(searchTerm);
     });
 
     currentPage = 1; // Reset to first page for new search
