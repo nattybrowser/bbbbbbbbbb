@@ -77,3 +77,15 @@ async function initialize() {
 }
 
 initialize();
+
+window.addEventListener("load", function () {
+    const preloader = document.getElementById("preloader");
+    preloader.classList.add("hide-preloader");
+
+    // Initialize Isotope
+    $('.entry-container').isotope({
+      itemSelector: '.entry-item',
+      layoutMode: 'masonry'
+    });
+    
+  });
