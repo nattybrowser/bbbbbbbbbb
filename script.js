@@ -6,8 +6,7 @@ async function fetchPosts() {
     return response.json();
 }
 
-async function displayPosts() {
-    const posts = await fetchPosts();
+async function displayPosts(posts) {
     const postContainer = document.getElementById('postContainer');
     postContainer.innerHTML = '';
     const start = (currentPage - 1) * postsPerPage;
@@ -35,8 +34,7 @@ async function displayPosts() {
     });
 }
 
-async function displayPagination() {
-    const posts = await fetchPosts();
+async function displayPagination(posts) {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
@@ -47,39 +45,35 @@ async function displayPagination() {
         pageLink.textContent = i;
         pageLink.addEventListener('click', () => {
             currentPage = i;
-            displayPosts();
+            displayPosts(posts);
         });
         pagination.appendChild(pageLink);
     }
 }
 
-document.getElementById('searchBar').addEventListener('input', async (event) => {
-    const searchTerm = event.target.value.toLowerCase();
+async function handleSearch() {
+    const searchTerm = document.getElementById('searchBar').value.trim().toLowerCase();
     const posts = await fetchPosts();
-    const filteredPosts = posts.filter(post => 
-        post.title.toLowerCase().includes(searchTerm) || 
-        post.description.toLowerCase().includes(searchTerm)
-    );
     
-    const postContainer = document.getElementById('postContainer');
-    postContainer.innerHTML = '';
-    
-    filteredPosts.forEach((post, index) => {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
-        postElement.innerHTML = `
-            <h2>${post.title}</h2>
-            ${post.image ? `<img src="${post.image}" alt="${post.title}" loading="lazy">` : ''}
-            ${post.video ? `<iframe src="${post.video}" frameborder="0"></iframe>` : ''}
-            <p>${post.description}</p>
-        `;
+    const filteredPosts = posts.filter(post => {
+        // Normalize both title and description for comparison
+        const normalizedTitle = post.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
+        const normalizedDescription = post.description.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove accents
         
-        postContainer.appendChild(postElement);
+        return normalizedTitle.includes(searchTerm) || normalizedDescription.includes(searchTerm);
     });
 
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-});
+    displayPosts(filteredPosts);
+    displayPagination(filteredPosts);
+}
 
-displayPosts();
-displayPagination();
+document.getElementById('searchBar').addEventListener('input', handleSearch);
+
+// Initial display of posts and pagination
+async function initialize() {
+    const posts = await fetchPosts();
+    displayPosts(posts);
+    displayPagination(posts);
+}
+
+initialize();
