@@ -60,8 +60,24 @@ function normalizeText(text) {
     return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\W_]+/g, " ").trim();
 }
 
+function generateSearchVariants(text) {
+    // Generate search variants by adding/removing spaces between words
+    const variants = [text];
+    const words = text.split(" ");
+    
+    if (words.length > 1) {
+        variants.push(words.join(""));
+        for (let i = 1; i < words.length; i++) {
+            variants.push(words.slice(0, i).join("") + " " + words.slice(i).join(" "));
+        }
+    }
+    
+    return variants;
+}
+
 async function handleSearch() {
     const searchTerm = normalizeText(document.getElementById('searchBar').value);
+    const searchVariants = generateSearchVariants(searchTerm);
     const posts = await fetchPosts();
     
     const filteredPosts = posts.filter(post => {
@@ -69,7 +85,11 @@ async function handleSearch() {
         const normalizedDescription = normalizeText(post.description);
         const normalizedTags = post.tags ? normalizeText(post.tags.join(' ')) : '';
         
-        return normalizedTitle.includes(searchTerm) || normalizedDescription.includes(searchTerm) || normalizedTags.includes(searchTerm);
+        return searchVariants.some(variant => 
+            normalizedTitle.includes(variant) || 
+            normalizedDescription.includes(variant) || 
+            normalizedTags.includes(variant)
+        );
     });
 
     currentPage = 1; // Reset to first page for new search
