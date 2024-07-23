@@ -46,3 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
         return postDiv;
     }
 });
+async function displayPagination(posts) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    const totalPages = Math.ceil(posts.length / postsPerPage);
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => {
+            currentPage = i;
+            displayPosts(posts);
+            displayPagination(posts);
+        });
+        pagination.appendChild(pageButton);
+    }
+}
+
