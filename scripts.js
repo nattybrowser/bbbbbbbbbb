@@ -81,9 +81,22 @@ document.addEventListener('DOMContentLoaded', function() {
             pageButton.addEventListener('click', () => {
                 currentPage = i;
                 displayPosts(posts, postsContainer, currentPage, postsPerPage);
-                displayPagination(posts, postsPerPage);
+                updatePagination(posts, postsPerPage);
             });
             pagination.appendChild(pageButton);
+        }
+    }
+
+    function updatePagination(posts, postsPerPage) {
+        const pagination = document.getElementById('pagination');
+        const totalPages = Math.ceil(posts.length / postsPerPage);
+        const buttons = pagination.getElementsByTagName('button');
+
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove('active');
+            if (i === currentPage - 1) {
+                buttons[i].classList.add('active');
+            }
         }
     }
 
