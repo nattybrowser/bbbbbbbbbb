@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Display filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio" ,"charli D'amelio and dixie"]; // Example title to be filtered
+                const filteredTitles = ["jameliz"]; // Example title to be filtered
                 filteredPosts = allPosts.filter(post => filteredTitles.includes(post.title));
                 displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
                 if (filteredPosts.length > postsPerPage && paginationContainer) {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayPagination(posts, postsPerPage) {
         if (paginationContainer) {
-            paginationContainer.innerHTML = '';
+            paginationContainer.innerHTML = ''; // Clear existing pagination buttons
 
             const totalPages = Math.ceil(posts.length / postsPerPage);
             for (let i = 1; i <= totalPages; i++) {
@@ -92,23 +92,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (postsContainer) {
                         displayPosts(posts, postsContainer, currentPage, postsPerPage);
                     }
-                    if (paginationContainer) {
-                        updatePagination(posts, postsPerPage);
+                    if (filteredPostsContainer) {
+                        displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
                     }
+                    updatePaginationButtons();
                 });
                 paginationContainer.appendChild(pageButton);
             }
         }
     }
 
-    function updatePagination(posts, postsPerPage) {
+    function updatePaginationButtons() {
         if (paginationContainer) {
-            const totalPages = Math.ceil(posts.length / postsPerPage);
             const buttons = paginationContainer.getElementsByTagName('button');
 
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].classList.remove('active');
-                if (i === currentPage - 1) {
+                if (parseInt(buttons[i].textContent) === currentPage) {
                     buttons[i].classList.add('active');
                 }
             }
