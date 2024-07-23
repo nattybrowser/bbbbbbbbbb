@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Load filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio", "Post 4"]; // Titles to be filtered
+                const filteredTitles = ["charli D'amelio", "dixie D'amelio", "charli D'amelio and dixie"]; // Titles to be filtered
                 const filteredPosts = data.filter(post => filteredTitles.includes(post.title));
 
                 filteredPosts.forEach(post => {
