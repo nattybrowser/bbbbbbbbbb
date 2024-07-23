@@ -1,27 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     const postsContainer = document.getElementById('posts');
     const filteredPostsContainer = document.getElementById('filteredPosts');
+    const postsPerPage = 5;
+    let currentPage = 1;
 
     fetch('post.json')
         .then(response => response.json())
         .then(data => {
             // Load all posts for the main page
             if (postsContainer) {
-                data.forEach(post => {
-                    const postElement = createPostElement(post);
-                    postsContainer.appendChild(postElement);
-                });
+                displayPosts(data, postsContainer, currentPage, postsPerPage);
+                displayPagination(data, postsPerPage);
             }
 
             // Load filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio", "dixie D'amelio", "charli D'amelio and dixie"]; // Titles to be filtered
+                const filteredTitles = ["jameliz", "Post 4"]; // Example titles to be filtered
                 const filteredPosts = data.filter(post => filteredTitles.includes(post.title));
-
-                filteredPosts.forEach(post => {
-                    const postElement = createPostElement(post);
-                    filteredPostsContainer.appendChild(postElement);
-                });
+                displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
+                displayPagination(filteredPosts, postsPerPage);
             }
         });
 
@@ -45,34 +42,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return postDiv;
     }
-    async function displayPagination(posts) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
 
-    const totalPages = Math.ceil(posts.length / postsPerPage);
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        if (i === currentPage) {
-            pageButton.classList.add('active');
-        }
-        pageButton.addEventListener('click', () => {
-            currentPage = i;
-            displayPosts(posts);
-            displayPagination(posts);
+    function displayPosts(posts, container, page, postsPerPage) {
+        container.innerHTML = ''; // Clear existing posts
+        const startIndex = (page - 1) * postsPerPage;
+        const endIndex = startIndex + postsPerPage;
+        const paginatedPosts = posts.slice(startIndex, endIndex);
+
+        paginatedPosts.forEach(post => {
+            const postElement = createPostElement(post);
+            container.appendChild(postElement);
         });
-        pagination.appendChild(pageButton);
     }
-}
-});
 
-window.addEventListener("load", function () {
-    const preloader = document.getElementById("preloader");
-    preloader.classList.add("hide-preloader");
+    function displayPagination(posts, postsPerPage) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
 
-    // Initialize Isotope
-    $('.entry-container').isotope({
-      itemSelector: '.entry-item',
-      layoutMode: 'masonry'
+        const totalPages = Math.ceil(posts.length / postsPerPage);
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                if (postsContainer) {
+                    displayPosts(data, postsContainer, currentPage, postsPerPage);
+                    displayPagination(posts, postsPerPage);
+                }
+                if (filteredPostsContainer) {
+                    displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
+                    displayPagination(filteredPosts, postsPerPage);
+                }
+            });
+            pagination.appendChild(pageButton);
+        }
+    }
+
+    window.addEventListener("load", function () {
+        const preloader = document.getElementById("preloader");
+        preloader.classList.add("hide-preloader");
+
+        // Initialize Isotope
+        const isotopeContainer = document.querySelector('.entry-container');
+        if (isotopeContainer) {
+            $(isotopeContainer).isotope({
+                itemSelector: '.entry-item',
+                layoutMode: 'masonry'
+            });
+        }
     });
 });
