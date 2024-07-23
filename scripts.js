@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return postDiv;
     }
-});
-async function displayPagination(posts) {
+    async function displayPagination(posts) {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
@@ -65,4 +64,6 @@ async function displayPagination(posts) {
         pagination.appendChild(pageButton);
     }
 }
+});
+
 
