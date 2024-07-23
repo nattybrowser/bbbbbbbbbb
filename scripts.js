@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Load filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["jameliz", "Post 4"]; // Example titles to be filtered
+                const filteredTitles = ["charli D'amelio and dixie", "charli D'amelio"]; // Example titles to be filtered
                 const filteredPosts = data.filter(post => filteredTitles.includes(post.title));
                 displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
                 displayPagination(filteredPosts, postsPerPage);
