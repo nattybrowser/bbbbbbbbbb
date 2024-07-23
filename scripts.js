@@ -1,24 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     const postsContainer = document.getElementById('posts');
     const filteredPostsContainer = document.getElementById('filteredPosts');
-    const postsPerPage = 5;
+    const postsPerPage = 16;
     let currentPage = 1;
+    let posts = [];  // This will store all posts for pagination
+    let filteredPosts = [];  // This will store filtered posts
 
     fetch('post.json')
         .then(response => response.json())
         .then(data => {
-            // Load all posts for the main page
+            posts = data;  // Store all posts
+
             if (postsContainer) {
-                displayPosts(data, postsContainer, currentPage, postsPerPage);
-                displayPagination(data, postsPerPage);
+                displayPosts(posts, postsContainer, currentPage, postsPerPage);
+                if (posts.length > postsPerPage) {
+                    displayPagination(posts, postsPerPage);
+                }
             }
 
-            // Load filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio and dixie", "charli D'amelio"]; // Example titles to be filtered
-                const filteredPosts = data.filter(post => filteredTitles.includes(post.title));
+                const filteredTitles = ["charli D'amelio, charli D;'amelio and dixie"]; // Example titles to be filtered
+                filteredPosts = posts.filter(post => filteredTitles.includes(post.title));
                 displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
-                displayPagination(filteredPosts, postsPerPage);
+                if (filteredPosts.length > postsPerPage) {
+                    displayPagination(filteredPosts, postsPerPage);
+                }
             }
         });
 
@@ -46,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayPosts(posts, container, page, postsPerPage) {
         container.innerHTML = ''; // Clear existing posts
         const startIndex = (page - 1) * postsPerPage;
-        const endIndex = startIndex + postsPerPage;
+        const endIndex = Math.min(startIndex + postsPerPage, posts.length);
         const paginatedPosts = posts.slice(startIndex, endIndex);
 
         paginatedPosts.forEach(post => {
@@ -69,13 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
             pageButton.addEventListener('click', () => {
                 currentPage = i;
                 if (postsContainer) {
-                    displayPosts(data, postsContainer, currentPage, postsPerPage);
-                    displayPagination(posts, postsPerPage);
+                    displayPosts(posts, postsContainer, currentPage, postsPerPage);
                 }
                 if (filteredPostsContainer) {
                     displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
-                    displayPagination(filteredPosts, postsPerPage);
                 }
+                displayPagination(posts, postsPerPage);  // Update pagination buttons
             });
             pagination.appendChild(pageButton);
         }
@@ -93,5 +98,3 @@ document.addEventListener('DOMContentLoaded', function() {
                 layoutMode: 'masonry'
             });
         }
-    });
-});
