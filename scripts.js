@@ -3,29 +3,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const filteredPostsContainer = document.getElementById('filteredPosts');
     const postsPerPage = 16;
     let currentPage = 1;
-    let posts = [];  // This will store all posts for pagination
-    let filteredPosts = [];  // This will store filtered posts
+    let allPosts = [];
+    let filteredPosts = [];
 
     fetch('post.json')
         .then(response => response.json())
         .then(data => {
-            posts = data;  // Store all posts
+            allPosts = data;
 
+            // Display posts for the main page
             if (postsContainer) {
-                displayPosts(posts, postsContainer, currentPage, postsPerPage);
-                if (posts.length > postsPerPage) {
-                    displayPagination(posts, postsPerPage);
+                displayPosts(allPosts, postsContainer, currentPage, postsPerPage);
+                if (allPosts.length > postsPerPage) {
+                    displayPagination(allPosts, postsPerPage);
                 }
             }
 
+            // Display filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio, charli D;'amelio and dixie"]; // Example titles to be filtered
-                filteredPosts = posts.filter(post => filteredTitles.includes(post.title));
+                const filteredTitles = ["jameliz"]; // Example title to be filtered
+                filteredPosts = allPosts.filter(post => filteredTitles.includes(post.title));
                 displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
                 if (filteredPosts.length > postsPerPage) {
                     displayPagination(filteredPosts, postsPerPage);
                 }
             }
+
+            // Hide the preloader once posts are loaded
+            const preloader = document.getElementById("preloader");
+            preloader.classList.add("hide-preloader");
         });
 
     function createPostElement(post) {
@@ -74,13 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             pageButton.addEventListener('click', () => {
                 currentPage = i;
-                if (postsContainer) {
-                    displayPosts(posts, postsContainer, currentPage, postsPerPage);
-                }
-                if (filteredPostsContainer) {
-                    displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
-                }
-                displayPagination(posts, postsPerPage);  // Update pagination buttons
+                displayPosts(posts, postsContainer, currentPage, postsPerPage);
+                displayPagination(posts, postsPerPage);
             });
             pagination.appendChild(pageButton);
         }
@@ -98,3 +99,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 layoutMode: 'masonry'
             });
         }
+    });
+});
