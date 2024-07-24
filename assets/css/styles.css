@@ -300,7 +300,7 @@ nav li {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 20px;
+   padding: 39px;
 }
 
 .post {
@@ -323,8 +323,10 @@ nav li {
 
 #searchBar {
     position: absolute;
-    left: 50%;
+    left: 44%;
     margin-bottom: 24px;
+    width: 314px;
+    height: 33px;
 }
 
 body, html {
