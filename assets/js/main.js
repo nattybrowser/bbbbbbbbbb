@@ -1,29 +1,21 @@
-
 /*=============== SHOW MENU ===============*/
 const navMenu = document.getElementById('nav-menu'),
       navToggle = document.getElementById('nav-toggle'),
-      navClose = document.getElementById('nav-close')
+      navClose = document.getElementById('nav-close');
 
 /* Menu show */
-if(navToggle){
-   navToggle.addEventListener('click', () =>{
-      navMenu.classList.add('show-menu')
-   })
+if(navToggle) {
+   navToggle.addEventListener('click', () => {
+      navMenu.classList.add('show-menu');
+   });
 }
 
 /* Menu hidden */
-if(navClose){
-   navClose.addEventListener('click', () =>{
-      navMenu.classList.remove('show-menu')
-   })
+if(navClose) {
+   navClose.addEventListener('click', () => {
+      navMenu.classList.remove('show-menu');
+   });
 }
-
-
-
-
-
-
-
 
 const postsPerPage = 16;
 let currentPage = 1;
@@ -54,11 +46,28 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
+        // Insert ad after every 6th post
         if ((index + 1) % 6 === 0) {
+            const adContainer = document.createElement('div');
+            adContainer.classList.add('ad-container');
             const adScript = document.createElement('script');
             adScript.type = 'text/javascript';
-            adScript.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
-            postContainer.appendChild(adScript);
+            adScript.text = `
+                atOptions = {
+                    'key' : '94e546547f0c1d04bcc33be261ff8357',
+                    'format' : 'iframe',
+                    'height' : 300,
+                    'width' : 160,
+                    'params' : {}
+                };
+                (function() {
+                    var script = document.createElement('script');
+                    script.src = "//constellationbedriddenexams.com/94e546547f0c1d04bcc33be261ff8357/invoke.js";
+                    document.head.appendChild(script);
+                })();
+            `;
+            adContainer.appendChild(adScript);
+            postContainer.appendChild(adContainer);
         }
     });
 }
@@ -88,7 +97,6 @@ function normalizeText(text) {
 }
 
 function generateSearchVariants(text) {
-    // Generate search variants by adding/removing spaces between words
     const variants = [text];
     const words = text.split(" ");
 
@@ -141,7 +149,7 @@ window.addEventListener("load", function () {
 
     // Initialize Isotope
     $('.entry-container').isotope({
-      itemSelector: '.entry-item',
-      layoutMode: 'masonry'
+        itemSelector: '.entry-item',
+        layoutMode: 'masonry'
     });
 });
