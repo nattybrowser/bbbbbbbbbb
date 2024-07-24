@@ -381,7 +381,7 @@ nav a:hover { /* Style on hover */
 @media (max-width: 768px) {
     .post {
         background-color: #444;
-        width: 73%;
+        width: 84%;
         margin: 27px;
         box-sizing: border-box;
         border: 1px solid #ccc;
@@ -393,6 +393,9 @@ nav a:hover { /* Style on hover */
     input#searchBar {
         height: 29px;
         width: 290px;
+                  width: 246px;
+        left: 23%;
+        position: absolute;
     }
 
     #searchBar {
