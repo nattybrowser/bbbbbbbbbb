@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Display filtered posts for the filtered page
             if (filteredPostsContainer) {
-                const filteredTitles = ["charli D'amelio"]; // Example title to be filtered
+                const filteredTitles = ["charli D'amelio" ,"charli D'amelio and dixie", "dixie"]; // Example title to be filtered
                 filteredPosts = allPosts.filter(post => filteredTitles.includes(post.title));
                 displayPosts(filteredPosts, filteredPostsContainer, currentPage, postsPerPage);
                 if (filteredPosts.length > postsPerPage && paginationContainer) {
