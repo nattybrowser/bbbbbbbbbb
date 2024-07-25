@@ -46,8 +46,8 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
-        // Insert ad after every 5th post
-        if ((index + 1) % 5 === 0) {
+        // Insert ad after the 5th post
+        if ((index + 1) === 5) {
             const adContainer = document.createElement('div');
             adContainer.classList.add('ad-container');
             postContainer.appendChild(adContainer);
@@ -73,8 +73,8 @@ async function displayPosts(posts) {
             console.log("Ad script added after post index:", index);
         }
 
-        // Insert new ad after every 10th post
-        if ((index + 1) % 10 === 0) {
+        // Insert new ad after the 10th post
+        if ((index + 1) === 10) {
             const adContainer10 = document.createElement('div');
             adContainer10.classList.add('ad-container');
             postContainer.appendChild(adContainer10);
