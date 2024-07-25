@@ -46,7 +46,7 @@ async function displayPosts(posts) {
 
         postContainer.appendChild(postElement);
 
-        // Insert ad after every 6th post
+        // Insert ad after every 5th post
         if ((index + 1) % 5 === 0) {
             const adContainer = document.createElement('div');
             adContainer.classList.add('ad-container');
