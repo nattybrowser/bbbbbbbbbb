@@ -72,6 +72,33 @@ async function displayPosts(posts) {
 
             console.log("Ad script added after post index:", index);
         }
+
+        // Insert new ad after every 10th post
+        if ((index + 1) % 10 === 0) {
+            const adContainer10 = document.createElement('div');
+            adContainer10.classList.add('ad-container');
+            postContainer.appendChild(adContainer10);
+
+            const adScriptConfig10 = document.createElement('script');
+            adScriptConfig10.type = 'text/javascript';
+            adScriptConfig10.text = `
+                atOptions = {
+                    'key' : '2a2b18c6d0e7fc8c71926bf73216c8a8',
+                    'format' : 'iframe',
+                    'height' : 250,
+                    'width' : 300,
+                    'params' : {}
+                };
+            `;
+            adContainer10.appendChild(adScriptConfig10);
+
+            const adScript10 = document.createElement('script');
+            adScript10.type = 'text/javascript';
+            adScript10.src = "//constellationbedriddenexams.com/2a2b18c6d0e7fc8c71926bf73216c8a8/invoke.js";
+            adContainer10.appendChild(adScript10);
+
+            console.log("New ad script added after post index:", index);
+        }
     });
 }
 
