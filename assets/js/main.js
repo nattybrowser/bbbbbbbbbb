@@ -22,7 +22,7 @@ let currentPage = 1;
 let allPosts = [];
 
 async function fetchPosts() {
-    const response = await fetch('post.json');
+    const response = await fetch('assets/js/post.json');
     allPosts = await response.json();
     return allPosts;
 }
