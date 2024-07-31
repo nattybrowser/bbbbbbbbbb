@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let allPosts = [];
     let filteredPosts = [];
 
-    fetch('post.json')
+    fetch('assets/js/post.json')
         .then(response => response.json())
         .then(data => {
             allPosts = data;
