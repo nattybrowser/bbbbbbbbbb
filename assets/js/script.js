@@ -118,4 +118,4 @@
         }
 
         // Pass the keyword you want to filter by as a parameter to the init function
-        init('your_keyword_here');
+        init('celeb');
